@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/tarm/serial"
 )
 
 var upgrader = websocket.Upgrader{
@@ -14,6 +15,15 @@ var upgrader = websocket.Upgrader{
 }
 
 func reader(conn *websocket.Conn) {
+	c := &serial.Config{Name: "/dev/ttyUSB0", Baud: 115200, Size: 8}
+
+	s, err := serial.OpenPort(c)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
 	for {
 		messageType, p, err := conn.ReadMessage()
 
@@ -23,6 +33,7 @@ func reader(conn *websocket.Conn) {
 		}
 
 		fmt.Println(string(p))
+		s.Write(p)
 
 		if err := conn.WriteMessage(messageType, p); err != nil {
 			log.Println(err)
@@ -47,9 +58,18 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		let socket = new WebSocket(sockAddr);
 		console.log("Attempting Connection...");
 
+		function sendStuff() {
+			setTimeout(function() {
+			  console.log('sending....');
+			  socket.send(String.fromCharCode(65, 3, 3, 0));
+			  sendStuff();
+			}, 300)
+		}
+
 		socket.onopen = () => {
 		    console.log("Successfully Connected");
-		    socket.send("Hi From the Client!")
+
+		    sendStuff();
 		};
 		
 		socket.onclose = event => {
