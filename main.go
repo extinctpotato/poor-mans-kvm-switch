@@ -69,7 +69,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		socket.onopen = () => {
 		    console.log("Successfully Connected");
 
-		    sendStuff();
+		    //sendStuff();
 		};
 		
 		socket.onclose = event => {
@@ -82,8 +82,11 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		};
 
 		document.addEventListener('mousemove', e => {
-		  let b = [e.movementX > 0, e.movementY > 0].reduce((res, x) => res << 1 | x);
-		  console.log(e, b, e.movementX, e.movementY);
+		  let a = Math.abs(e.movementX) + 1;
+		  let b = Math.abs(e.movementY) + 1;
+		  let c = [e.movementX > 0, e.movementY > 0].reduce((res, x) => res << 1 | x);
+		  console.log(a,b,c);
+		  socket.send(String.fromCharCode(65, a, b, c));
 		});
 
 	    </script>
