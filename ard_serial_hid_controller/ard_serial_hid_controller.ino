@@ -11,6 +11,14 @@ struct IncomingMsg {
 
 IncomingMsg incoming_msg;
 
+char bitToMultiplier(char b, int n) {
+  if (b & (1 << n)) {
+    return 1;
+  } else {
+    return -1;
+  }
+}
+
 void deserialize_msg(char* msg, struct IncomingMsg *i_msg) {
   i_msg->command = msg[0];
   i_msg->arg1 = msg[1];
@@ -71,11 +79,24 @@ void msg_demo() {
 }
 
 void handle_msg(struct IncomingMsg *i_msg) {
+  char xMul, yMul;
+  
   switch (i_msg->command) {
     case 10:
       break;
     case 65:
-      Mouse.move(i_msg->arg1, i_msg->arg2, 0);
+      // +--------+--------+-------------+
+      // | X axis | Y axis | i_msg->arg3 |
+      // +--------+--------+-------------+
+      // | Neg    | Neg    |           0 |
+      // | Neg    | Pos    |           1 |
+      // | Pos    | Neg    |           2 |
+      // | Pos    | Pos    |           3 |
+      // +--------+--------+-------------+
+      xMul = bitToMultiplier(i_msg->arg3, 1);
+      yMul = bitToMultiplier(i_msg->arg3, 0);
+      
+      Mouse.move((i_msg->arg1)*xMul, (i_msg->arg2)*yMul, 0);
       break;
     case 66:
       switch(i_msg->arg1) {
