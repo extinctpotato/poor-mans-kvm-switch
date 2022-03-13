@@ -61,7 +61,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		function sendStuff() {
 			setTimeout(function() {
 			  console.log('sending....');
-			  socket.send(String.fromCharCode(65, 3, 3, 0));
+			  socket.send(String.fromCharCode(65, 3, 3, 3));
 			  sendStuff();
 			}, 300)
 		}
@@ -80,6 +80,11 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		socket.onerror = error => {
 		    console.log("Socket Error: ", error);
 		};
+
+		document.addEventListener('mousemove', e => {
+		  let b = [e.movementX > 0, e.movementY > 0].reduce((res, x) => res << 1 | x);
+		  console.log(e, b, e.movementX, e.movementY);
+		});
 
 	    </script>
 	  </body>
