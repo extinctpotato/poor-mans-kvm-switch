@@ -53,9 +53,42 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	    <title>poor mans kvm test</title>
 	  </head>
 	  <body>
+	    <canvas width="600" height="600">
+	    </canvas>
 	    <script>
 		let sockAddr = 'ws://' + window.location.host + '/ws';
 		let socket = new WebSocket(sockAddr);
+
+		// Get canvas-related DOM variables.
+		let canvas = document.querySelector('canvas');
+		let ctx = canvas.getContext('2d');
+
+		// Draw black background.
+		ctx.fillStyle = "black";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.fill();
+
+		// Allow grabbing cursor and releasing it.
+		canvas.onclick = function() {
+		  canvas.requestPointerLock();
+		}
+
+		function sendMovement(e) {
+		  let a = Math.min(Math.abs(e.movementX) + 1, 127);
+		  let b = Math.min(Math.abs(e.movementY) + 1, 127);
+
+		  let c = [e.movementX > 0, e.movementY > 0].reduce((res, x) => res << 1 | x);
+		  socket.send(String.fromCharCode(65, a, b, c));
+		}
+
+		document.addEventListener("pointerlockchange", () => {
+		  if (document.pointerLockElement === canvas) {
+		    document.addEventListener('mousemove', sendMovement);
+		  } else {
+		    document.removeEventListener('mousemove', sendMovement);
+		  }
+		});
+
 		console.log("Attempting Connection...");
 
 		socket.onopen = () => {
@@ -70,16 +103,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		socket.onerror = error => {
 		    console.log("Socket Error: ", error);
 		};
-
-		document.addEventListener('mousemove', e => {
-		  let a = Math.min(Math.abs(e.movementX) + 1, 127);
-		  let b = Math.min(Math.abs(e.movementY) + 1, 127);
-
-		  let c = [e.movementX > 0, e.movementY > 0].reduce((res, x) => res << 1 | x);
-		  console.log(a,b,c);
-		  socket.send(String.fromCharCode(65, a, b, c));
-		});
-
 	    </script>
 	  </body>
 	</html>
