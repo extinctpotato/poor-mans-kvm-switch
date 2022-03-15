@@ -58,18 +58,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		let socket = new WebSocket(sockAddr);
 		console.log("Attempting Connection...");
 
-		function sendStuff() {
-			setTimeout(function() {
-			  console.log('sending....');
-			  socket.send(String.fromCharCode(65, 3, 3, 3));
-			  sendStuff();
-			}, 300)
-		}
-
 		socket.onopen = () => {
 		    console.log("Successfully Connected");
-
-		    //sendStuff();
 		};
 		
 		socket.onclose = event => {
