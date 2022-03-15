@@ -81,11 +81,20 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		  socket.send(String.fromCharCode(65, a, b, c));
 		}
 
+		function sendMouseClick(e) {
+		  let msgType = e.type === 'mouseup' ? 68 : 67;
+		  socket.send(String.fromCharCode(msgType, e.button, 0, 0));
+		}
+
 		document.addEventListener("pointerlockchange", () => {
 		  if (document.pointerLockElement === canvas) {
 		    document.addEventListener('mousemove', sendMovement);
+		    document.addEventListener('mouseup', sendMouseClick);
+		    document.addEventListener('mousedown', sendMouseClick);
 		  } else {
 		    document.removeEventListener('mousemove', sendMovement);
+		    document.removeEventListener('mouseup', sendMouseClick);
+		    document.removeEventListener('mousedown', sendMouseClick);
 		  }
 		});
 
