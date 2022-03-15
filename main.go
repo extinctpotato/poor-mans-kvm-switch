@@ -82,8 +82,9 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		};
 
 		document.addEventListener('mousemove', e => {
-		  let a = Math.abs(e.movementX) + 1;
-		  let b = Math.abs(e.movementY) + 1;
+		  let a = Math.min(Math.abs(e.movementX) + 1, 127);
+		  let b = Math.min(Math.abs(e.movementY) + 1, 127);
+
 		  let c = [e.movementX > 0, e.movementY > 0].reduce((res, x) => res << 1 | x);
 		  console.log(a,b,c);
 		  socket.send(String.fromCharCode(65, a, b, c));
