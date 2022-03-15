@@ -100,14 +100,40 @@ void handle_msg(struct IncomingMsg *i_msg) {
       break;
     case 66:
       switch(i_msg->arg1) {
-        case 65:
+        case 0:
           Mouse.click(MOUSE_LEFT);
           break;
-        case 66:
+        case 2:
           Mouse.click(MOUSE_RIGHT);
           break;
-        case 67:
+        case 1:
           Mouse.click(MOUSE_MIDDLE);
+          break;
+      }
+      break;
+     case 67:
+      switch(i_msg->arg1) {
+        case 0:
+          Mouse.press(MOUSE_LEFT);
+          break;
+        case 2:
+          Mouse.press(MOUSE_RIGHT);
+          break;
+        case 1:
+          Mouse.press(MOUSE_MIDDLE);
+          break;
+      }
+      break;
+     case 68:
+      switch(i_msg->arg1) {
+        case 0:
+          Mouse.release(MOUSE_LEFT);
+          break;
+        case 2:
+          Mouse.release(MOUSE_RIGHT);
+          break;
+        case 1:
+          Mouse.release(MOUSE_MIDDLE);
           break;
       }
       break;
