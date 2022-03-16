@@ -137,6 +137,9 @@ void handle_msg(struct IncomingMsg *i_msg) {
           break;
       }
       break;
+     case 69:
+      Mouse.move(0, 0, i_msg->arg1 * (i_msg->arg2 - 1));
+      break;
   }
 }
 

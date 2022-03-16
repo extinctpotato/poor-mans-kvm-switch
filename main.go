@@ -86,15 +86,22 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		  socket.send(String.fromCharCode(msgType, e.button, 0, 0));
 		}
 
+		function sendMouseScroll(e) {
+		  let sign = (e.deltaY > 0) ? 0 : 2;
+		  socket.send(String.fromCharCode(69, 1, sign, 0));
+		}
+
 		document.addEventListener("pointerlockchange", () => {
 		  if (document.pointerLockElement === canvas) {
 		    document.addEventListener('mousemove', sendMovement);
 		    document.addEventListener('mouseup', sendMouseClick);
 		    document.addEventListener('mousedown', sendMouseClick);
+		    document.addEventListener('wheel', sendMouseScroll);
 		  } else {
 		    document.removeEventListener('mousemove', sendMovement);
 		    document.removeEventListener('mouseup', sendMouseClick);
 		    document.removeEventListener('mousedown', sendMouseClick);
+		    document.removeEventListener('wheel', sendMouseScroll);
 		  }
 		});
 
