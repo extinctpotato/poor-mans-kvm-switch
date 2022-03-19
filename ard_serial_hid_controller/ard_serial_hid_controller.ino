@@ -1,4 +1,5 @@
 #include "Mouse.h"
+#include "Keyboard.h"
 
 char buf[5];
 
@@ -140,6 +141,15 @@ void handle_msg(struct IncomingMsg *i_msg) {
     case 69:
       Mouse.move(0, 0, i_msg->arg1 * (i_msg->arg2 - 1));
       break;
+    case 70:
+      Keyboard.press(i_msg->arg1);
+      break;
+    case 71:
+      Keyboard.release(i_msg->arg1);
+      break;
+    case 72:
+      Keyboard.releaseAll();
+      break;
   }
 }
 
@@ -148,6 +158,7 @@ void setup() {
   Serial.begin(115200);
   Serial1.begin(115200);
   Mouse.begin();
+  Keyboard.begin();
 }
 
 void loop() {

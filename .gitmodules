@@ -1,0 +1,6 @@
+[submodule "ard_serial_hid_controller/lib/Keyboard"]
+	path = ard_serial_hid_controller/lib/Keyboard
+	url = https://github.com/arduino-libraries/Keyboard.git
+[submodule "ard_serial_hid_controller/lib/Mouse"]
+	path = ard_serial_hid_controller/lib/Mouse
+	url = https://github.com/arduino-libraries/Mouse.git
