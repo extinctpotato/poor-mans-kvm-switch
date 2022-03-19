@@ -3,7 +3,6 @@ BOARD_FQBN 	= arduino:avr:leonardo
 BOARD_TTY	= /dev/ttyACM0
 
 BUILDDIR 	= build
-SRCDIR 		= .
 
 SKETCH		= ard_serial_hid_controller
 SKETCHHEX	= $(BUILDDIR)/$(SKETCH).ino.with_bootloader.hex
