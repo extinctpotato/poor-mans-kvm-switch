@@ -28,11 +28,11 @@ void deserialize_msg(char* msg, struct IncomingMsg *i_msg) {
 
 void serialize_msg(char* msg, struct IncomingMsg *i_msg) {
   snprintf(msg, 5, "%c%c%c%c",
-    i_msg->command,
-    i_msg->arg1,
-    i_msg->arg2,
-    i_msg->arg3
-    );
+      i_msg->command,
+      i_msg->arg1,
+      i_msg->arg2,
+      i_msg->arg3
+      );
 }
 
 void print_msg(struct IncomingMsg *i_msg) {
@@ -80,7 +80,7 @@ void msg_demo() {
 
 void handle_msg(struct IncomingMsg *i_msg) {
   char xMul, yMul;
-  
+
   switch (i_msg->command) {
     case 10:
       break;
@@ -95,7 +95,7 @@ void handle_msg(struct IncomingMsg *i_msg) {
       // +--------+--------+-------------+
       xMul = bitToMultiplier(i_msg->arg3, 1);
       yMul = bitToMultiplier(i_msg->arg3, 0);
-      
+
       Mouse.move((i_msg->arg1)*xMul, (i_msg->arg2)*yMul, 0);
       break;
     case 66:
@@ -111,7 +111,7 @@ void handle_msg(struct IncomingMsg *i_msg) {
           break;
       }
       break;
-     case 67:
+    case 67:
       switch(i_msg->arg1) {
         case 0:
           Mouse.press(MOUSE_LEFT);
@@ -124,7 +124,7 @@ void handle_msg(struct IncomingMsg *i_msg) {
           break;
       }
       break;
-     case 68:
+    case 68:
       switch(i_msg->arg1) {
         case 0:
           Mouse.release(MOUSE_LEFT);
@@ -137,7 +137,7 @@ void handle_msg(struct IncomingMsg *i_msg) {
           break;
       }
       break;
-     case 69:
+    case 69:
       Mouse.move(0, 0, i_msg->arg1 * (i_msg->arg2 - 1));
       break;
   }
