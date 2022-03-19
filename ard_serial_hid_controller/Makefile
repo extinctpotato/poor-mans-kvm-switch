@@ -10,7 +10,7 @@ SKETCHHEX	= $(BUILDDIR)/$(SKETCH).ino.with_bootloader.hex
 
 build: $(SKETCHHEX)
 
-upload: compile
+upload: build
 	$(ARD) upload -b $(BOARD_FQBN) -p $(BOARD_TTY) --input-dir=$(BUILDDIR)
 
 $(BUILDDIR)/%.ino.with_bootloader.hex: %.ino
