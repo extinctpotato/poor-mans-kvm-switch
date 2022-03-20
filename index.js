@@ -7,7 +7,6 @@ socket.binaryType = 'arraybuffer';
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 
-// TODO: check if ContextMenu is correct.
 const SPECIAL_KEY_MAPPING = {
   'Enter': 0xB0,
   'ControlLeft': 0x80,
@@ -26,6 +25,8 @@ const SPECIAL_KEY_MAPPING = {
   'Tab': 0xB3,
   'ContextMenu': 0xED,
   'Escape': 0xB1,
+  'Insert': 0xD1,
+  'Delete': 0xD4,
   'PageUp': 0xD3,
   'PageDown': 0xD6,
   'Home': 0xD2,
@@ -51,6 +52,7 @@ const SPECIAL_KEY_MAPPING = {
   'Numpad8': 0xE8,
   'Numpad9': 0xE9,
   'NumpadComma': 0xEB,
+  'NumpadDecimal': 0xEB,
   'F1': 0xC2,
   'F2': 0xC3,
   'F3': 0xC4,
