@@ -12,6 +12,12 @@ struct IncomingMsg {
 
 IncomingMsg incoming_msg;
 
+const uint8_t mouseMapping[] = {
+  MOUSE_LEFT,
+  MOUSE_MIDDLE,
+  MOUSE_RIGHT
+};
+
 char bitToMultiplier(byte b, int n) {
   if (b & (1 << n)) {
     return 1;
@@ -57,43 +63,13 @@ void handle_msg(struct IncomingMsg *i_msg) {
       Mouse.move((char)(i_msg->arg1)*xMul, (char)(i_msg->arg2)*yMul, 0);
       break;
     case 66:
-      switch(i_msg->arg1) {
-        case 0:
-          Mouse.click(MOUSE_LEFT);
-          break;
-        case 2:
-          Mouse.click(MOUSE_RIGHT);
-          break;
-        case 1:
-          Mouse.click(MOUSE_MIDDLE);
-          break;
-      }
+      Mouse.click(mouseMapping[i_msg->arg1]);
       break;
     case 67:
-      switch(i_msg->arg1) {
-        case 0:
-          Mouse.press(MOUSE_LEFT);
-          break;
-        case 2:
-          Mouse.press(MOUSE_RIGHT);
-          break;
-        case 1:
-          Mouse.press(MOUSE_MIDDLE);
-          break;
-      }
+      Mouse.press(mouseMapping[i_msg->arg1]);
       break;
     case 68:
-      switch(i_msg->arg1) {
-        case 0:
-          Mouse.release(MOUSE_LEFT);
-          break;
-        case 2:
-          Mouse.release(MOUSE_RIGHT);
-          break;
-        case 1:
-          Mouse.release(MOUSE_MIDDLE);
-          break;
-      }
+      Mouse.release(mouseMapping[i_msg->arg1]);
       break;
     case 69:
       Mouse.move(0, 0, i_msg->arg1 * (i_msg->arg2 - 1));
