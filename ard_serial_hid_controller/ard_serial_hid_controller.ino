@@ -27,15 +27,6 @@ void deserialize_msg(byte* msg, struct IncomingMsg *i_msg) {
   i_msg->arg3 = msg[3];
 }
 
-void serialize_msg(byte* msg, struct IncomingMsg *i_msg) {
-  snprintf(msg, 5, "%c%c%c%c",
-      i_msg->command,
-      i_msg->arg1,
-      i_msg->arg2,
-      i_msg->arg3
-      );
-}
-
 void print_msg(struct IncomingMsg *i_msg) {
   Serial.println("=== BEGIN print_msg ===");
   Serial.println(i_msg->command, DEC);
@@ -43,40 +34,6 @@ void print_msg(struct IncomingMsg *i_msg) {
   Serial.println(i_msg->arg2, DEC);
   Serial.println(i_msg->arg3, DEC);
   Serial.println("=== END print_msg ===");
-}
-
-void print_msg_c(byte* msg) {
-  Serial.println("=== BEGIN print_msg_c ===");
-  for (int i = 0; i < 4; i++) {
-    Serial.print(i, DEC);
-    Serial.print(": ");
-    Serial.println(msg[i], DEC);
-  }
-  Serial.println("=== END print_msg_c ===");
-}
-
-void msg_demo() {
-  struct IncomingMsg* i_msg = malloc(sizeof(struct IncomingMsg));
-  struct IncomingMsg* i_msg_p = malloc(sizeof(struct IncomingMsg));
-
-  byte i_msg_c[5];
-
-  i_msg->command = 2;
-  i_msg->arg1 = 1;
-  i_msg->arg2 = 3;
-  i_msg->arg3 = 7;
-
-  print_msg(i_msg);
-  serialize_msg(i_msg_c, i_msg);
-  Serial.println("serialized");
-
-  print_msg_c(i_msg_c);
-
-  deserialize_msg(i_msg_c, i_msg_p);
-  print_msg(i_msg_p);
-
-  free(i_msg);
-  free(i_msg_p);
 }
 
 void handle_msg(struct IncomingMsg *i_msg) {
