@@ -9,6 +9,7 @@ let ctx = canvas.getContext('2d');
 
 // TODO: check if ContextMenu is correct.
 const SPECIAL_KEY_MAPPING = {
+  'Enter': 0xB0,
   'ControlLeft': 0x80,
   'ShiftLeft': 0x81,
   'AltLeft': 0x82,
