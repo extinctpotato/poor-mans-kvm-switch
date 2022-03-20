@@ -1,6 +1,8 @@
 let sockAddr = 'ws://' + window.location.host + '/ws';
 let socket = new WebSocket(sockAddr);
 
+socket.binaryType = 'arraybuffer';
+
 // Get canvas-related DOM variables.
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
@@ -86,22 +88,35 @@ canvas.onclick = function() {
   canvas.requestPointerLock();
 }
 
+function makeMsg(msgType, ...args) {
+  let msg = new Uint8Array(4);
+
+  msg[0] = msgType;
+
+  for (let i = 1; i < 4; i++) {
+    msg[i] = args[i-1] || 0;
+  }
+
+  return msg;
+}
+
 function sendMovement(e) {
   let a = Math.min(Math.abs(e.movementX) + 1, 127);
   let b = Math.min(Math.abs(e.movementY) + 1, 127);
 
   let c = [e.movementX > 0, e.movementY > 0].reduce((res, x) => res << 1 | x);
   socket.send(String.fromCharCode(65, a, b, c));
+  socket.send(makeMsg(65, a, b, c));
 }
 
 function sendMouseClick(e) {
   let msgType = e.type === 'mouseup' ? 68 : 67;
-  socket.send(String.fromCharCode(msgType, e.button, 0, 0));
+  socket.send(makeMsg(msgType, e.button));
 }
 
 function sendMouseScroll(e) {
   let sign = (e.deltaY > 0) ? 0 : 2;
-  socket.send(String.fromCharCode(69, 1, sign, 0));
+  socket.send(makeMsg(69, 1, sign));
 }
 
 function sendKey(e) {
@@ -119,7 +134,7 @@ function sendKey(e) {
 
   console.log('Sending', key, e);
 
-  socket.send(String.fromCharCode(msgType, key, 0, 0));
+  socket.send(makeMsg(msgType, key));
 }
 
 document.addEventListener("pointerlockchange", () => {
