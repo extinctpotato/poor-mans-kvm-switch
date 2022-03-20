@@ -1,18 +1,18 @@
 #include "Mouse.h"
 #include "Keyboard.h"
 
-char buf[5];
+byte buf[5];
 
 struct IncomingMsg {
-  char command;
-  char arg1;
-  char arg2;
-  char arg3;
+  byte command;
+  byte arg1;
+  byte arg2;
+  byte arg3;
 };
 
 IncomingMsg incoming_msg;
 
-char bitToMultiplier(char b, int n) {
+char bitToMultiplier(byte b, int n) {
   if (b & (1 << n)) {
     return 1;
   } else {
@@ -20,14 +20,14 @@ char bitToMultiplier(char b, int n) {
   }
 }
 
-void deserialize_msg(char* msg, struct IncomingMsg *i_msg) {
+void deserialize_msg(byte* msg, struct IncomingMsg *i_msg) {
   i_msg->command = msg[0];
   i_msg->arg1 = msg[1];
   i_msg->arg2 = msg[2];
   i_msg->arg3 = msg[3];
 }
 
-void serialize_msg(char* msg, struct IncomingMsg *i_msg) {
+void serialize_msg(byte* msg, struct IncomingMsg *i_msg) {
   snprintf(msg, 5, "%c%c%c%c",
       i_msg->command,
       i_msg->arg1,
@@ -45,7 +45,7 @@ void print_msg(struct IncomingMsg *i_msg) {
   Serial.println("=== END print_msg ===");
 }
 
-void print_msg_c(char* msg) {
+void print_msg_c(byte* msg) {
   Serial.println("=== BEGIN print_msg_c ===");
   for (int i = 0; i < 4; i++) {
     Serial.print(i, DEC);
@@ -59,7 +59,7 @@ void msg_demo() {
   struct IncomingMsg* i_msg = malloc(sizeof(struct IncomingMsg));
   struct IncomingMsg* i_msg_p = malloc(sizeof(struct IncomingMsg));
 
-  char i_msg_c[5];
+  byte i_msg_c[5];
 
   i_msg->command = 2;
   i_msg->arg1 = 1;
@@ -97,7 +97,7 @@ void handle_msg(struct IncomingMsg *i_msg) {
       xMul = bitToMultiplier(i_msg->arg3, 1);
       yMul = bitToMultiplier(i_msg->arg3, 0);
 
-      Mouse.move((i_msg->arg1)*xMul, (i_msg->arg2)*yMul, 0);
+      Mouse.move((char)(i_msg->arg1)*xMul, (char)(i_msg->arg2)*yMul, 0);
       break;
     case 66:
       switch(i_msg->arg1) {
