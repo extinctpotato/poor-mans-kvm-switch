@@ -36,7 +36,7 @@ func reader(conn *websocket.Conn) {
 			return
 		}
 
-		fmt.Println(string(p))
+		fmt.Println(p)
 		s.Write(p)
 
 		if err := conn.WriteMessage(messageType, p); err != nil {
