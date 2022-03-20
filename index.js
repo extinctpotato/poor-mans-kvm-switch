@@ -105,7 +105,6 @@ function sendMovement(e) {
   let b = Math.min(Math.abs(e.movementY) + 1, 127);
 
   let c = [e.movementX > 0, e.movementY > 0].reduce((res, x) => res << 1 | x);
-  socket.send(String.fromCharCode(65, a, b, c));
   socket.send(makeMsg(65, a, b, c));
 }
 
