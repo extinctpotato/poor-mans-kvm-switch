@@ -6,7 +6,7 @@ let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 
 // TODO: check if ContextMenu is correct.
-let specialKeyMapping = {
+const SPECIAL_KEY_MAPPING = {
   'ControlLeft': 0x80,
   'ShiftLeft': 0x81,
   'AltLeft': 0x82,
@@ -104,17 +104,39 @@ function sendMouseScroll(e) {
   socket.send(String.fromCharCode(69, 1, sign, 0));
 }
 
+function sendKey(e) {
+  let key;
+  let msgType = e.type === 'keydown' ? 70 : 71;
+
+  if (e.code in SPECIAL_KEY_MAPPING) {
+    key = SPECIAL_KEY_MAPPING[e.code];
+  } else if (e.key.length === 1) {
+    key = e.key.charCodeAt(0);
+  } else {
+    console.log('Unsupported key type', key);
+    return
+  }
+
+  console.log('Sending', key, e);
+
+  socket.send(String.fromCharCode(msgType, key, 0, 0));
+}
+
 document.addEventListener("pointerlockchange", () => {
   if (document.pointerLockElement === canvas) {
     document.addEventListener('mousemove', sendMovement);
     document.addEventListener('mouseup', sendMouseClick);
     document.addEventListener('mousedown', sendMouseClick);
     document.addEventListener('wheel', sendMouseScroll);
+    document.addEventListener('keyup', sendKey);
+    document.addEventListener('keydown', sendKey);
   } else {
     document.removeEventListener('mousemove', sendMovement);
     document.removeEventListener('mouseup', sendMouseClick);
     document.removeEventListener('mousedown', sendMouseClick);
     document.removeEventListener('wheel', sendMouseScroll);
+    document.removeEventListener('keyup', sendKey);
+    document.removeEventListener('keydown', sendKey);
   }
 });
 
