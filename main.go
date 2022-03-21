@@ -47,6 +47,7 @@ func reader(conn *websocket.Conn) {
 }
 
 func indexJsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/javascript")
 	fmt.Fprintf(w, indexJs)
 }
 
