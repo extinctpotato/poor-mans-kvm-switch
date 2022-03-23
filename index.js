@@ -1,6 +1,4 @@
-let socket = new WebSocket(getSocketUrl());
-
-socket.binaryType = 'arraybuffer';
+var socket;
 
 // Get canvas-related DOM variables.
 let canvas = document.querySelector('canvas');
@@ -90,6 +88,29 @@ canvas.onclick = function() {
   canvas.requestPointerLock();
 }
 
+function connectSocket() {
+  let socketUrl = getSocketUrl();
+  socket = new WebSocket(socketUrl);
+
+  socket.binaryType = 'arraybuffer';
+
+  socket.onopen = () => {
+    console.log(`Connection to ${socketUrl} has been established`);
+  };
+  
+  socket.onclose = event => {
+    console.log("Socket has been closed", event);
+    setTimeout(function() {
+      connectSocket();
+    }, 1000);
+  };
+  
+  socket.onerror = error => {
+    console.log("Socket error has occured", error);
+    socket.close();
+  };
+}
+
 function getSocketUrl() {
   let protocol = (window.location.protocol === 'https:') ? 'wss' : 'ws';
   let baseUrl = new URL(window.location.pathname, `${protocol}://${window.location.host}`);
@@ -163,17 +184,4 @@ document.addEventListener("pointerlockchange", () => {
   }
 });
 
-console.log("Attempting Connection...");
-
-socket.onopen = () => {
-  console.log("Successfully Connected");
-};
-
-socket.onclose = event => {
-  console.log("Socket Closed Connection: ", event);
-  socket.send("Client Closed!")
-};
-
-socket.onerror = error => {
-  console.log("Socket Error: ", error);
-};
+connectSocket();
