@@ -1,5 +1,4 @@
-let sockAddr = 'ws://' + window.location.host + '/ws';
-let socket = new WebSocket(sockAddr);
+let socket = new WebSocket(getSocketUrl());
 
 socket.binaryType = 'arraybuffer';
 
@@ -89,6 +88,13 @@ ctx.fill();
 // Allow grabbing cursor and releasing it.
 canvas.onclick = function() {
   canvas.requestPointerLock();
+}
+
+function getSocketUrl() {
+  let protocol = (window.location.protocol === 'https:') ? 'wss' : 'ws';
+  let baseUrl = new URL(window.location.pathname, `${protocol}://${window.location.host}`);
+  
+  return new URL('ws', baseUrl);
 }
 
 function makeMsg(msgType, ...args) {
